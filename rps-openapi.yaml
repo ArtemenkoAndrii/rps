@@ -1,0 +1,212 @@
+openapi: 3.0.3
+externalDocs:
+  description: 'Follows the JSON:API v1.1 standard'
+  url: 'https://jsonapi.org/'
+info:
+  title: Rock-paper-scissors API
+  version: v1
+paths:
+  /api/games/new:
+    summary: Creates new round
+    post:
+      parameters:
+        - name: JSESSIONID
+          in: cookie
+          description: Anonymous user tracking identifier
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        '4XX':
+          description: Client error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ClientErrors'
+        '5XX':
+          description: Server API error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ServerErrors' 
+  /api/games/{id}:
+    summary: Provides a round by id
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Round id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        '4XX':
+          description: Client error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ClientErrors'
+        '5XX':
+          description: Server API e
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ServerErrors'
+  /api/games/all:
+    summary: Provides all available rounds of current/all users
+    get:
+      parameters:
+        - name: JSESSIONID
+          in: cookie
+          description: Anonymous user tracking identifier
+          required: false
+          schema:
+            type: string
+        - name: AllUsers
+          in: query
+          description: Filter
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        '4XX':
+          description: Client error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ClientErrors'
+        '5XX':
+          description: Server API error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ServerErrors'    
+    delete:
+        parameters:
+          - name: JSESSIONID
+            in: cookie
+            description: Anonymous user tracking identifier
+            required: false
+            schema:
+              type: string
+          - name: AllUsers
+            in: query
+            description: Filter
+            required: false
+            style: form
+            explode: false
+            schema:
+              type: boolean
+        responses:
+          '200':
+            description: Success
+            content:
+              application/vnd.api+json:
+                schema:
+                  $ref: '#/components/schemas/Success'
+          '4XX':
+            description: Client error
+            content:
+              application/vnd.api+json:
+                schema:
+                  $ref: '#/components/schemas/ClientErrors'
+          '5XX':
+            description: Server API error
+            content:
+              application/vnd.api+json:
+                schema:
+                  $ref: '#/components/schemas/ServerErrors'   
+components:
+  schemas:       
+    Round:
+      type: object
+      description: Represents game round
+      properties:
+        type:
+          type: string
+          enum:
+            - round
+        id:
+          type: string
+        attributes:
+          type: object
+          properties:          
+            userName:
+              type: string
+            player1:
+              type: string
+            player2:
+              type: string
+            result:
+              type: string
+          required:
+            - userName
+            - player1
+            - player2
+            - result
+      required:
+        - type
+        - id
+        - attributes
+
+    Success:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Round'      
+      example:
+        data:
+          type: round
+          id: 1
+          attributes:
+            userName: User 1
+            player1: Paper
+            player2: Rock
+            result: First win              
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            properties:
+              detail:
+                description: Description of the specific instance of an error
+                type: string
+
+    ClientErrors:
+      allOf:
+        - $ref: '#/components/schemas/Errors'
+        - example:
+            errors:
+              - detail: Parameter "id" should be integer
+
+    ServerErrors:
+      allOf:
+        - $ref: '#/components/schemas/Errors'
+        - example:
+            errors:
+              - detail: Oops! Something went wrong
