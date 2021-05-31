@@ -27,7 +27,7 @@ public class ErrorController {
     }
 
     private ResponseEntity<ErrorResponse> createError(final HttpStatus status, final String detail) {
-        var response = new ErrorResponse(List.of(new Error(detail)));
+        var response = ResponseMapper.mapError(detail);
         return new ResponseEntity<>(response, status);
     }
 }
