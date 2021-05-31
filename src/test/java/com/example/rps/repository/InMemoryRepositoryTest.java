@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InMemoryRepositoryTest {
     private static final int ID1 = 1;
@@ -44,6 +45,12 @@ class InMemoryRepositoryTest {
         underTest.removeById(ID1);
         assertEquals(1, underTest.getAll().size());
         assertEquals(NAME2, underTest.getById(ID2).getName());
+    }
+
+    @Test
+    void shouldSuccessivelyGenerateIds() {
+        int id = underTest.generateId();
+        assertTrue(id > 0);
     }
 
     @Getter
