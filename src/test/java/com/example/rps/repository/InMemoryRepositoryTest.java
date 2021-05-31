@@ -51,6 +51,8 @@ class InMemoryRepositoryTest {
     void shouldSuccessivelyGenerateIds() {
         int id = underTest.generateId();
         assertTrue(id > 0);
+        int nextId = underTest.generateId();
+        assertEquals(id + 1, nextId);
     }
 
     @Getter
