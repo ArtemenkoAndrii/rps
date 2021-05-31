@@ -18,4 +18,8 @@ public class InMemoryRepository<T> {
     public Collection<T> getAll() {
         return entities.values();
     }
+
+    public void removeAll() {
+        entities.clear();
+    }
 }
