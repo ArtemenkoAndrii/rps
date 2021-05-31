@@ -39,6 +39,13 @@ class InMemoryRepositoryTest {
         assertEquals(0, underTest.getAll().size());
     }
 
+    @Test
+    void shouldRemoveById() {
+        underTest.removeById(ID1);
+        assertEquals(1, underTest.getAll().size());
+        assertEquals(NAME2, underTest.getById(ID2).getName());
+    }
+
     @Getter
     @AllArgsConstructor
     @EqualsAndHashCode
