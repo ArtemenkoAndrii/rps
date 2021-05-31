@@ -33,6 +33,12 @@ class InMemoryRepositoryTest {
         assertEquals(2, underTest.getAll().size());
     }
 
+    @Test
+    void shouldRemoveAll() {
+        underTest.removeAll();
+        assertEquals(0, underTest.getAll().size());
+    }
+
     @Getter
     @AllArgsConstructor
     @EqualsAndHashCode
