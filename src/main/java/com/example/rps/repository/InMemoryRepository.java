@@ -22,4 +22,8 @@ public class InMemoryRepository<T> {
     public void removeAll() {
         entities.clear();
     }
+
+    public T removeById(Integer id) {
+        return entities.remove(id);
+    }
 }
